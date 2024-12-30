@@ -9,7 +9,9 @@ import com.tugas.dataprojek2.Repositori.MahasiswaRepository
 import com.tugas.dataprojek2.model.Mahasiswa
 import kotlinx.coroutines.launch
 
-class InsertViewModel (private val mhs: MahasiswaRepository): ViewModel(){
+class InsertViewModel(
+    private val mhs: MahasiswaRepository
+): ViewModel(){
     var uiState by mutableStateOf(InsertUiState())
         private set
 
@@ -21,16 +23,12 @@ class InsertViewModel (private val mhs: MahasiswaRepository): ViewModel(){
         viewModelScope.launch {
             try {
                 mhs.insertMahasiswa(uiState.insertUiEvent.toMhs())
-            }catch (e:Exception){
+            } catch (e: Exception){
                 e.printStackTrace()
             }
         }
     }
 }
-
-data class InsertUiState(
-    val insertUiEvent: InsertUiEvent = InsertUiEvent()
-)
 
 data class InsertUiEvent(
     val nim: String = "",
@@ -41,7 +39,11 @@ data class InsertUiEvent(
     val angkatan: String = "",
 )
 
-fun InsertUiEvent.toMhs():Mahasiswa = Mahasiswa(
+data class InsertUiState(
+    val insertUiEvent: InsertUiEvent = InsertUiEvent()
+)
+
+fun InsertUiEvent.toMhs(): Mahasiswa = Mahasiswa(
     nim = nim,
     nama = nama,
     alamat = alamat,
@@ -50,15 +52,15 @@ fun InsertUiEvent.toMhs():Mahasiswa = Mahasiswa(
     angkatan = angkatan
 )
 
-fun Mahasiswa.toUiStateMhs():InsertUiState = InsertUiState(
+fun Mahasiswa.toInsertUiEvent(): InsertUiEvent = InsertUiEvent(
+    nim = nim,
+    nama = nama,
+    alamat = alamat,
+    jenisKelamin = jenisKelamin,
+    kelas = kelas,
+    angkatan = angkatan
+)
+
+fun Mahasiswa.toUiStateMhs(): InsertUiState = InsertUiState(
     insertUiEvent = toInsertUiEvent()
-)
-
-fun Mahasiswa.toInsertUiEvent():InsertUiEvent = InsertUiEvent(
-    nim = nim,
-    nama = nama,
-    alamat = alamat,
-    jenisKelamin = jenisKelamin,
-    kelas = kelas,
-    angkatan = angkatan
 )
